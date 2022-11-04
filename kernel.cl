@@ -95,6 +95,21 @@ static inline int fortress_old_at(ulong world_seed, int x, int z) {
     return 1;
 }
 
+static inline int portal_at(ulong world_seed, int x, int z) {
+  int rSize = 40;
+  int rSep = 15;
+  int int_7 = x + rSize * 0;
+  int int_8 = z + rSize * 0;
+  int int_9 = int_7 < 0 ? int_7 - rSize + 1 : int_7;
+  int int_10 = int_8 < 0 ? int_8 - rSize + 1 : int_8;
+  int rx = int_9 / rSize;
+  int rz = int_10 / rSize;
+  Random r = get_random_with_structure_seed(world_seed, rx, rz, 34222645);
+  if (random_next_int(&r, rSize - rSep) != x - rx * rSize) return 0;
+  if (random_next_int(&r, rSize - rSep) != z - rz * rSize) return 0;
+  return 1;
+}
+
 __kernel void start(ulong offset, ulong stride, __global ulong *seeds, __global ushort *ret) {
     size_t id = get_global_id(0);
     uchar max_count = 0;
